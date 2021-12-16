@@ -18,7 +18,7 @@ class _msgBoxState extends State<msgBox> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      flex: 9,
+      flex: 10,
       child: Container(
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.all(20),
