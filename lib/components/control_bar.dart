@@ -15,6 +15,8 @@ class _controlBarState extends State<controlBar> {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        const Padding(padding: EdgeInsets.only(left: 20)),
+        
         FloatingActionButton.extended(
           onPressed: () async {
             var data = await updateExperimentStatus();
@@ -23,6 +25,9 @@ class _controlBarState extends State<controlBar> {
           },
           label: const Text('start'),
         ),
+        
+        const Padding(padding: EdgeInsets.only(left: 40)),
+
         DropdownButton<String>(
           value: dropdownItem,
           items: <String>['Experiment A', 'Experiment B']
@@ -38,7 +43,6 @@ class _controlBarState extends State<controlBar> {
             });
           },
         ),
-        Text('2'),
       ],
     );
   }
