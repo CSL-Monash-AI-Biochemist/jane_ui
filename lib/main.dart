@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
 import 'package:jane_ui/components/message_box.dart';
 import 'package:jane_ui/components/control_bar.dart';
+import 'package:jane_ui/components/plot_graph.dart';
 
 void main() => runApp(const JaneUI());
 
@@ -45,7 +46,11 @@ class JaneUI extends StatelessWidget {
             ),
             const Expanded(
               flex: 3,
-              child: Text('plot here')
+              child: Padding(
+                padding: EdgeInsets.all(50),
+                child: LineChartW()
+                )
+              
             )
           ],
         )
