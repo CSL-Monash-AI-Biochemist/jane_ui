@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:jane_ui/backend.dart';
 
@@ -19,9 +21,11 @@ class _controlBarState extends State<controlBar> {
         
         FloatingActionButton.extended(
           onPressed: () async {
-            var data = await updateExperimentStatus();
-
-            debugPrint('hi');
+            await updateExperimentState();
+            
+            var receivedData = await getExperimentData();
+            var experimentData = jsonDecode(receivedData);
+            
           },
           label: const Text('start'),
         ),
