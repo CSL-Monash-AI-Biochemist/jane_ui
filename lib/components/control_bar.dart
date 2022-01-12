@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jane_ui/backend.dart';
 
 class controlBar extends StatefulWidget {
   controlBar({Key? key}) : super(key: key);
@@ -15,13 +16,13 @@ class _controlBarState extends State<controlBar> {
     return Row(
       children: [
         FloatingActionButton.extended(
-          onPressed: ()
-          {
+          onPressed: () async {
+            var data = await updateExperimentStatus();
 
+            debugPrint('hi');
           },
           label: const Text('start'),
         ),
-
         DropdownButton<String>(
           value: dropdownItem,
           items: <String>['Experiment A', 'Experiment B']
@@ -31,17 +32,14 @@ class _controlBarState extends State<controlBar> {
               child: Text(value),
             );
           }).toList(),
-          onChanged: (String? newValue)
-          {
+          onChanged: (String? newValue) {
             setState(() {
               dropdownItem = newValue!;
             });
-          }, 
+          },
         ),
-
         Text('2'),
       ],
     );
   }
 }
-
