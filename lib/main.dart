@@ -29,8 +29,6 @@ class JaneUI extends StatelessWidget {
 class JaneParent extends StatelessWidget {
   JaneParent({Key? key}) : super(key: key);
 
-  String value = 'oh yes';
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -51,13 +49,13 @@ class JaneParent extends StatelessWidget {
                   ),
 
                   // display experiment status
-                  Expanded(
-                    flex: 1,
-                    child: Text(value),
-                  ),
+                  // Expanded(
+                  //   flex: 1,
+                  //   child: Text(value),
+                  // ),
 
                   // terminal-like message box
-                  msgBox(value: value),
+                  MsgBox(),
                 ],
               )
             ),

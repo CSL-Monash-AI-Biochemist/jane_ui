@@ -14,24 +14,23 @@ class _ExPlotState extends State<ExPlot> {
   @override
   Widget build(BuildContext context) {
     final janeStatus = context.watch<JaneStatus>();
-    double a = janeStatus.exData[0][0];
+    
+    List<FlSpot> plotData = array2FlSpot(janeStatus.exData);
 
     return Container(
       child: LineChart(
         LineChartData(
-              minX: -3,
-              maxX: 3,
-              minY: -3,
-              maxY: 3,
+              minX: 0,
+              maxX: 25,
+              // minY: 0,
+              // maxY: 1,
               lineBarsData: [
                 LineChartBarData(
-                  spots: [
-                    FlSpot(1, 1),
-                    FlSpot(0, 0),
-                    FlSpot(a, -2)]
-
+                  spots: plotData,
+                  isCurved: true
                 )
               ]
+              
         )
       )
     );
@@ -39,4 +38,23 @@ class _ExPlotState extends State<ExPlot> {
   
 }
 
+List<FlSpot> array2FlSpot(var array)
+{
+  List<double> ts = [];
+  List<double> edata = [];
+  List<FlSpot> flspot = [];
+  array.asMap().forEach((i, row){
+    row.asMap().forEach((j, val){
+      if (i == 0) ts.add(val);
+      else        edata.add(val);
+    });
+  });
+
+  for (var i=0; i<ts.length; i++)
+  {
+    flspot.add(FlSpot(ts[i], edata[i]));
+  }
+
+  return flspot;
+}
 

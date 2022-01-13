@@ -1,22 +1,21 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:jane_ui/components/jane_status.dart';
 
-class msgBox extends StatefulWidget {
-  final String value;
-
-  msgBox({
-    Key? key,
-    required this.value,
-  }) : super(key: key);
+class MsgBox extends StatefulWidget {
+  MsgBox({Key? key}) : super(key: key);
 
   @override
-  _msgBoxState createState() => _msgBoxState();
+  _MsgBoxState createState() => _MsgBoxState();
 }
 
-class _msgBoxState extends State<msgBox> {
-  String msgDisplay = "";
-
+class _MsgBoxState extends State<MsgBox> {
   @override
   Widget build(BuildContext context) {
+    final janeStatus = context.watch<JaneStatus>();
+
     return Expanded(
       flex: 10,
       child: Container(
@@ -30,7 +29,7 @@ class _msgBoxState extends State<msgBox> {
           isAlwaysShown: true,
           child: ListView(
             children: [
-              Text(msgDisplay)
+              Text(janeStatus.consoleMsg)
             ],
           ),
         ),

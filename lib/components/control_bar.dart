@@ -32,14 +32,18 @@ class _ControlBarState extends State<ControlBar> {
 
             var receivedData = await getExperimentData();
             var experimentData = jsonDecode(receivedData);
+
+            // testing only, will remove later
             counter += 0.1;
-
             experimentData[0][0] += counter;
-
             janeStatus.updateExData(experimentData);
-            
+            janeStatus.updateConsoleMsg('adding more msg');
           },
-          label: const Text('start'),
+          label: const Text(
+            'Start',
+            style: TextStyle(
+              fontSize: 22
+            ),),
         ),
         
         const Padding(padding: EdgeInsets.only(left: 40)),
@@ -59,6 +63,17 @@ class _ControlBarState extends State<ControlBar> {
             });
           },
         ),
+
+        const Padding(padding: EdgeInsets.only(left: 40)),
+
+        Text(
+          'Status: ' + janeStatus.exState,
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.green[400]
+          ),
+        )
       ],
     );
   }
