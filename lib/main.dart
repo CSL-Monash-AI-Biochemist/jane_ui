@@ -1,4 +1,3 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:jane_ui/components/jane_status.dart';
 import 'package:jane_ui/components/message_box.dart';
@@ -16,12 +15,13 @@ class JaneUI extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Scaffold(
-            appBar: AppBar(
-              title: const Text('Jane Command Centre'),
-            ),
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Jane Command Centre'),
+        ),
         body: JaneParent()
-        )
+      )
     );
   }
 }
@@ -32,7 +32,7 @@ class JaneParent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => JaneStatus('idle', [[0, 0], [1, 1]]),
+      create: (_) => JaneStatus('idle', [[0.0, 0.0], [1.2, 1.0]]),
       child: Row(
           children: <Widget>[
             Expanded(
@@ -62,10 +62,21 @@ class JaneParent extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Padding(
-                padding: EdgeInsets.all(50),
-                child: ExPlot()
+                padding: const EdgeInsets.all(50),
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: ExPlot(dataSrc: 'ref')),
+                    
+                    const Padding(padding: EdgeInsets.all(20)),
+
+                    Expanded(
+                      flex: 5,
+                      child: ExPlot(dataSrc: 'src'))
+                  ],
                 )
-              
+              )
             )
           ],
         ),
