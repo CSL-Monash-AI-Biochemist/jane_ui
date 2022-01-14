@@ -18,6 +18,14 @@ updateExperimentState() async {
   return response.body;
 }
 
+getExperimentState() async {
+  http.Response response = await http.get(
+    Uri.parse(baseUrl + 'experiment/state')
+  );
+
+  return response.body;
+}
+
 getExperimentData() async {
   http.Response response = await http.get(
     Uri.parse(baseUrl + 'experiment/data')

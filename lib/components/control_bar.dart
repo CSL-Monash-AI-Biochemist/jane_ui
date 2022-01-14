@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:jane_ui/backend.dart';
@@ -26,18 +27,23 @@ class _ControlBarState extends State<ControlBar> {
         
         FloatingActionButton.extended(
           onPressed: () async {
-            await updateExperimentState();
-            
+            await updateExperimentState();            
             janeStatus.updateExState(janeStatusJSON['experiment']!['state'].toString());
 
-            var receivedData = await getExperimentData();
-            var experimentData = jsonDecode(receivedData);
+            Timer.periodic(const Duration(seconds: 1), (_timer) async {
+              var receivedData = await getExperimentData();
+              var experimentData = jsonDecode(receivedData);
 
-            // testing only, will remove later
-            counter += 0.1;
-            experimentData[0][0] += counter;
-            janeStatus.updateExData(experimentData);
-            janeStatus.updateConsoleMsg('adding more msg');
+              var state = await getExperimentState();
+
+              // testing only, will remove later
+              janeStatus.updateExData(experimentData);
+              janeStatus.updateExState(state);
+            });
+            
+            // testing only
+            janeStatus.updateConsoleMsg('adding more msg');          
+
           },
           label: const Text(
             'Start',
