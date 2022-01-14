@@ -12,7 +12,7 @@ updateExperimentState() async {
   }
 
   http.Response response = await http.post(
-    Uri.parse(baseUrl + 'experiment'),
+    Uri.parse(baseUrl + 'experiment/state'),
     body: json.encode(janeStatusJSON['experiment']!['state']));
     
   return response.body;
