@@ -3,7 +3,10 @@ import 'dart:convert';
 
 String baseUrl = 'http://127.0.0.1:5000/';
 var janeStatusJSON = {
-  'experiment': {'state': 'idle', 'data': []}
+  'experiment': {
+    'state': 'idle', 
+    'data_ref': [],
+    'data_src': []}
 };
 
 updateExperimentState() async {
@@ -28,7 +31,15 @@ getExperimentState() async {
 
 getExperimentData() async {
   http.Response response = await http.get(
-    Uri.parse(baseUrl + 'experiment/data')
+    Uri.parse(baseUrl + 'experiment/data/src')
+  );
+
+  return response.body;
+}
+
+getReferenceData() async {
+  http.Response response = await http.get(
+    Uri.parse(baseUrl + 'experiment/data/ref')
   );
 
   return response.body;

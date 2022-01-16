@@ -18,42 +18,42 @@ class _ControlBarState extends State<ControlBar> {
 
   @override
   Widget build(BuildContext context) {
-
     final janeStatus = context.watch<JaneStatus>();
 
     return Row(
       children: [
         const Padding(padding: EdgeInsets.only(left: 20)),
-        
         FloatingActionButton.extended(
           onPressed: () async {
-            await updateExperimentState();            
+            await updateExperimentState();
             janeStatus.updateExState(janeStatusJSON['experiment']!['state'].toString());
+            
+            var receivedData = await getReferenceData();
+            var referenceData = jsonDecode(receivedData);
+            janeStatus.updateRefData(referenceData);
 
             Timer.periodic(const Duration(seconds: 1), (_timer) async {
-              var receivedData = await getExperimentData();
-              var experimentData = jsonDecode(receivedData);
-
               var state = await getExperimentState();
-
-              // testing only, will remove later
-              janeStatus.updateExData(experimentData);
               janeStatus.updateExState(state);
-            });
-            
-            // testing only
-            janeStatus.updateConsoleMsg('adding more msg');          
 
+              receivedData = await getExperimentData();
+              var experimentData = jsonDecode(receivedData);
+              janeStatus.updateExData(experimentData);
+
+              if (janeStatus.exData[0].length > 2) {
+                _timer.cancel();
+              }
+            });
+
+            // testing only
+            janeStatus.updateConsoleMsg('adding more msg');
           },
           label: const Text(
             'Start',
-            style: TextStyle(
-              fontSize: 22
-            ),),
+            style: TextStyle(fontSize: 22),
+          ),
         ),
-        
         const Padding(padding: EdgeInsets.only(left: 40)),
-
         DropdownButton<String>(
           value: dropdownItem,
           items: <String>['Experiment A', 'Experiment B']
@@ -69,16 +69,13 @@ class _ControlBarState extends State<ControlBar> {
             });
           },
         ),
-
         const Padding(padding: EdgeInsets.only(left: 40)),
-
         Text(
           'Status: ' + janeStatus.exState,
           style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.green[400]
-          ),
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.green[400]),
         )
       ],
     );

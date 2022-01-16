@@ -32,7 +32,7 @@ class JaneParent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => JaneStatus('idle', [[0.0, 0.0], [1.2, 1.0]]),
+      create: (_) => JaneStatus('idle', [[0.0, 0.0], [1.2, 1.0]], [[0.0, 0.0], [1.2, 1.0]]),
       child: Row(
           children: <Widget>[
             Expanded(
@@ -47,15 +47,8 @@ class JaneParent extends StatelessWidget {
                       child: ControlBar(),
                     ),
                   ),
-
-                  // display experiment status
-                  // Expanded(
-                  //   flex: 1,
-                  //   child: Text(value),
-                  // ),
-
-                  // terminal-like message box
-                  MsgBox(),
+            
+                  MsgBox(), // terminal-like message box
                 ],
               )
             ),
@@ -69,7 +62,7 @@ class JaneParent extends StatelessWidget {
                       flex: 5,
                       child: ExPlot(dataSrc: 'ref')),
                     
-                    const Padding(padding: EdgeInsets.all(20)),
+                    const Padding(padding: EdgeInsets.all(50)),
 
                     Expanded(
                       flex: 5,
