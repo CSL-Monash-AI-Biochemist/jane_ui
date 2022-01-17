@@ -26,19 +26,25 @@ class _ControlBarState extends State<ControlBar> {
         FloatingActionButton.extended(
           onPressed: () async {
             await updateExperimentState();
-            janeStatus.updateExState(janeStatusJSON['experiment']!['state'].toString());
-            
-            var receivedData = await getReferenceData();
-            var referenceData = jsonDecode(receivedData);
+            janeStatus.updateExState(
+                janeStatusJSON['experiment']!['state'].toString());
+
+            // need to wait a bit before sending the reference data
+            Future.delayed(const Duration(seconds: 1));
+            var referenceData = await getReferenceData();
             janeStatus.updateRefData(referenceData);
 
+            // keep checking if state changes
             Timer.periodic(const Duration(seconds: 1), (_timer) async {
               var state = await getExperimentState();
               janeStatus.updateExState(state);
 
-              receivedData = await getExperimentData();
-              var experimentData = jsonDecode(receivedData);
-              janeStatus.updateExData(experimentData);
+              var experimentData = await getExperimentData();
+              // only update if there is real data
+              // TODO: check if there is any changes with current data instead
+              if (experimentData[0].length > 2) {
+                janeStatus.updateExData(experimentData);
+              }
 
               if (janeStatus.exData[0].length > 2) {
                 _timer.cancel();

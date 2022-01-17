@@ -34,7 +34,7 @@ getExperimentData() async {
     Uri.parse(baseUrl + 'experiment/data/src')
   );
 
-  return response.body;
+  return jsonDecode(response.body);
 }
 
 getReferenceData() async {
@@ -42,5 +42,5 @@ getReferenceData() async {
     Uri.parse(baseUrl + 'experiment/data/ref')
   );
 
-  return response.body;
+  return jsonDecode(response.body);
 }
