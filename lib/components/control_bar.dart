@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:jane_ui/backend.dart';
 import 'package:jane_ui/components/jane_status.dart';
@@ -40,10 +39,14 @@ class _ControlBarState extends State<ControlBar> {
               janeStatus.updateExState(state);
 
               var experimentData = await getExperimentData();
+              String sampleQuality = await getSampleQuality();
               // only update if there is real data
               // TODO: check if there is any changes with current data instead
               if (experimentData[0].length > 2) {
                 janeStatus.updateExData(experimentData);
+                janeStatus.updateExState("Test completed");
+                String msg = 'The sample quality: ' + sampleQuality;
+                janeStatus.updateConsoleMsg(msg);
               }
 
               if (janeStatus.exData[0].length > 2) {

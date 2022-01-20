@@ -11,12 +11,14 @@ class JaneStatus extends ChangeNotifier {
     [1, 1]
   ];
   String _consoleMsg = 'Hello World';
+  String _sampleQuality = 'N/A';
 
   // getter
   String get exState => _experimentState;
   List<dynamic> get refData => _referenceData;
   List<dynamic> get exData => _experimentData;
   String get consoleMsg => _consoleMsg;
+  String get sampleQuality => _sampleQuality;
 
   JaneStatus(this._experimentState, this._experimentData, this._referenceData);
 
@@ -36,6 +38,11 @@ class JaneStatus extends ChangeNotifier {
 
   void updateRefData(List<dynamic> data) {
     _referenceData = data;
+    notifyListeners();
+  }
+
+  void updateSampleQuality(String quality) {
+    _sampleQuality = quality;
     notifyListeners();
   }
 }

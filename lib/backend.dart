@@ -44,3 +44,11 @@ getReferenceData() async {
 
   return jsonDecode(response.body);
 }
+
+getSampleQuality() async {
+  http.Response response = await http.get(
+    Uri.parse(baseUrl + 'experiment/data/quality')
+  );
+
+  return response.body;
+}
