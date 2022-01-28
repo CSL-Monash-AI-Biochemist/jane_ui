@@ -38,6 +38,10 @@ class _ExPlotState extends State<ExPlot> {
         maxX: 25,
         // minY: 0,
         // maxY: 1,
+        titlesData: FlTitlesData(
+          rightTitles: SideTitles(showTitles: false),
+          topTitles: SideTitles(showTitles: false)
+        ),
         lineBarsData: [
           LineChartBarData(
             spots: plotData,
@@ -45,7 +49,7 @@ class _ExPlotState extends State<ExPlot> {
             dotData: FlDotData(
               show: false
             ),
-            colors: [Colors.green],
+            colors: [Colors.red.shade400],
           )
         ]     
       )

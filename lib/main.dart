@@ -4,6 +4,7 @@ import 'package:jane_ui/components/message_box.dart';
 import 'package:jane_ui/components/control_bar.dart';
 import 'package:jane_ui/components/plot_graph.dart';
 import 'package:provider/provider.dart';
+import 'package:jane_ui/components/plot_selector.dart';
 
 void main() => runApp(const JaneUI());
 
@@ -58,15 +59,26 @@ class JaneParent extends StatelessWidget {
                 padding: const EdgeInsets.all(50),
                 child: Column(
                   children: [
+                    const Text("Sample standard",
+                      style: TextStyle(fontSize: 20),),
+                    const Padding(padding: EdgeInsets.all(5)),
                     Expanded(
                       flex: 5,
-                      child: ExPlot(dataSrc: 'ref')),
-                    
-                    const Padding(padding: EdgeInsets.all(50)),
+                      child: ExPlot(dataSrc: 'src')),
+
+                    const Padding(padding: EdgeInsets.all(10)),
+                    const Text("Time [min]"),
+                    const Padding(padding: EdgeInsets.all(20)),
+
+                    Expanded(
+                      flex: 1,
+                      child: plotSelector()),
 
                     Expanded(
                       flex: 5,
-                      child: ExPlot(dataSrc: 'src'))
+                      child: ExPlot(dataSrc: 'ref')),
+                    const Padding(padding: EdgeInsets.all(10)),
+                    const Text("Time [min]")
                   ],
                 )
               )
