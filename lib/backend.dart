@@ -11,7 +11,7 @@ var janeStatusJSON = {
 
 updateExperimentState() async {
   if (janeStatusJSON['experiment']!['state'] == 'idle') {
-    janeStatusJSON['experiment']!['state'] = 'running';
+    janeStatusJSON['experiment']!['state'] = 'standard';
   }
 
   http.Response response = await http.post(

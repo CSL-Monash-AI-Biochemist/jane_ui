@@ -80,7 +80,7 @@ class _ControlBarState extends State<ControlBar> {
         ),
         const Padding(padding: EdgeInsets.only(left: 40)),
         Text(
-          'Status: ' + janeStatus.exState,
+          'Status: ' + _getStatusDisplay(janeStatus.exState),
           style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -88,5 +88,21 @@ class _ControlBarState extends State<ControlBar> {
         )
       ],
     );
+  }
+
+  String _getStatusDisplay(String state)
+  {
+    String output = "";
+    if (state == "idle") {
+      output = "idle";
+    }
+    else if (state == "standard" || state == "sample") {
+      output = "running";
+    }
+    else if (state == "complete") {
+      output = "complete";
+    }
+
+    return output;
   }
 }
