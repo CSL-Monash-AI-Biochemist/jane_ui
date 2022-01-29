@@ -2,21 +2,11 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 String baseUrl = 'http://127.0.0.1:5000/';
-var janeStatusJSON = {
-  'experiment': {
-    'state': 'idle', 
-    'data_ref': [],
-    'data_src': []}
-};
 
-updateExperimentState() async {
-  if (janeStatusJSON['experiment']!['state'] == 'idle') {
-    janeStatusJSON['experiment']!['state'] = 'standard';
-  }
-
+updateExperimentState(String state) async {
   http.Response response = await http.post(
     Uri.parse(baseUrl + 'experiment/state'),
-    body: json.encode(janeStatusJSON['experiment']!['state']));
+    body: json.encode(state));
     
   return response.body;
 }
@@ -51,4 +41,12 @@ getSampleQuality() async {
   );
 
   return response.body;
+}
+
+getNoOfSample() async {
+  http.Response response = await http.get(
+    Uri.parse(baseUrl + 'experiment/n_sample')
+  );
+
+  return int.parse(response.body);
 }

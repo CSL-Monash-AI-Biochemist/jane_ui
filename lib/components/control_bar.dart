@@ -18,50 +18,65 @@ class _ControlBarState extends State<ControlBar> {
   @override
   Widget build(BuildContext context) {
     final janeStatus = context.watch<JaneStatus>();
+    int nSamplePrev = -1;
 
+    // update GUI - interface with backend server 
+    void _updateGUI() async {
+      if (janeStatus.exState == 'idle') {
+        janeStatus.updateExState('starting');
+        await updateExperimentState('starting');
+        janeStatus.updateConsoleMsg('Started experiment');
+      }
+
+      Timer.periodic(const Duration(seconds: 1), (_timer) async {
+        int nSample = await getNoOfSample();
+        janeStatus.updateNumOfSample(nSample);
+        var state = await getExperimentState();
+        janeStatus.updateExState(state);
+
+        if (nSample == 0) {
+          var refData = await getReferenceData();
+          janeStatus.updateRefData(refData);
+        }
+        else if (nSample > 0 && nSample != nSamplePrev) {
+          var exData = await getExperimentData();
+          String sampleQuality = await getSampleQuality();      
+          
+          janeStatus.updateExData(nSample, exData);
+          janeStatus.updateSampleQuality(nSample, sampleQuality);
+          janeStatus.updateConsoleMsg(
+            'Finished testing Sample ' + nSample.toString() + '. Sample quality: ' + sampleQuality);
+        }
+
+        janeStatus.updateConsoleMsg('nSample: ' + nSample.toString() + ' prev: ' + nSamplePrev.toString() + ' state:' + state);
+
+
+        nSamplePrev = nSample;
+        // if (nSample == 3) {
+        //   _timer.cancel();
+        // }
+        
+      });
+
+    }
+    
+
+
+
+    // return widgets
     return Row(
       children: [
         const Padding(padding: EdgeInsets.only(left: 20)),
         FloatingActionButton.extended(
           onPressed: () async {
-            await updateExperimentState();
-            janeStatus.updateExState(
-                janeStatusJSON['experiment']!['state'].toString());
-
-            // need to wait a bit before sending the reference data
-            Future.delayed(const Duration(seconds: 1));
-            var referenceData = await getReferenceData();
-            janeStatus.updateRefData(referenceData);
-
-            // keep checking if state changes
-            Timer.periodic(const Duration(seconds: 1), (_timer) async {
-              var state = await getExperimentState();
-              janeStatus.updateExState(state);
-
-              var experimentData = await getExperimentData();
-              String sampleQuality = await getSampleQuality();
-              // only update if there is real data
-              // TODO: check if there is any changes with current data instead
-              if (experimentData[0].length > 2) {
-                janeStatus.updateExData(1, experimentData);
-                janeStatus.updateExState("Test completed");
-                String msg = 'The sample quality: ' + sampleQuality;
-                janeStatus.updateConsoleMsg(msg);
-              }
-
-              if (janeStatus.exData(1)[0].length > 2) {
-                _timer.cancel();
-              }
-            });
-
-            // testing only
-            janeStatus.updateConsoleMsg('adding more msg');
+            _updateGUI();
           },
           label: const Text(
             'Start',
             style: TextStyle(fontSize: 22),
           ),
         ),
+
         const Padding(padding: EdgeInsets.only(left: 40)),
         DropdownButton<String>(
           value: dropdownItem,
@@ -92,15 +107,21 @@ class _ControlBarState extends State<ControlBar> {
 
   String _getStatusDisplay(String state)
   {
-    String output = "";
-    if (state == "idle") {
-      output = "idle";
+    String output = '';
+    if (state == 'idle') {
+      output = 'idle';
     }
-    else if (state == "standard" || state == "sample") {
-      output = "running";
+    else if (state == 'starting') {
+      output = 'starting';
     }
-    else if (state == "complete") {
-      output = "complete";
+    else if (state == 'standard') {
+      output = 'running standard';
+    }
+    else if (state == 'sample') {
+      output = 'running samples';
+    }
+    else if (state == 'complete') {
+      output = 'complete';
     }
 
     return output;

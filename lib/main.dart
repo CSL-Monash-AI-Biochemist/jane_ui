@@ -6,10 +6,10 @@ import 'package:jane_ui/components/plot_graph.dart';
 import 'package:provider/provider.dart';
 import 'package:jane_ui/components/plot_selector.dart';
 
-void main() => runApp(const JaneUI());
+void main() => runApp(JaneUI());
 
 class JaneUI extends StatelessWidget {
-  const JaneUI({Key? key}) : super(key: key);
+  JaneUI({Key? key}) : super(key: key);
 
   final String value = 'hihihihihihi';
 
@@ -19,7 +19,15 @@ class JaneUI extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Jane Command Centre'),
+          centerTitle: true,
+          title: const Text(
+            'Jane Command Centre', 
+            style: TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.bold
+            ),
+            textAlign: TextAlign.center,
+            ),
         ),
         body: JaneParent()
       )

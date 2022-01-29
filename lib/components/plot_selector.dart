@@ -8,7 +8,8 @@ class plotSelector extends StatefulWidget {
 }
 
 class _plotSelectorState extends State<plotSelector> {
-  String dropdownItem = 'nothing here';
+  String dropdownItem = 'No sample data yet';
+  String sampleQuality = 'N/A';
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class _plotSelectorState extends State<plotSelector> {
       children: [
         DropdownButton<String>(
           value: dropdownItem,
-          items: <String>['Experiment A', 'Experiment B', 'nothing here']
+          items: <String>['Experiment A', 'Experiment B', 'No sample data yet']
               .map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
@@ -31,7 +32,7 @@ class _plotSelectorState extends State<plotSelector> {
           },
         ),
         const Padding(padding: EdgeInsets.all(5)),
-        Text(': hihi', 
+        Text(': ' + sampleQuality, 
           style: const TextStyle(
             fontSize: 20,
             color: Colors.redAccent,

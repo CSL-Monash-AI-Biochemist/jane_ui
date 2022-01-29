@@ -6,14 +6,16 @@ class JaneStatus extends ChangeNotifier {
   var _experimentData = {1:[]};
   List<dynamic> _referenceData = [];
   String _consoleMsg = '';
-  String _sampleQuality = '';
+  List<String> _sampleQuality = ['']; // sample no starts from one 
+  int _nSample = -1;
 
   // getter
   String get exState => _experimentState;
   exData(int sampleNo) => _experimentData[sampleNo];
   List<dynamic> get refData => _referenceData;
   String get consoleMsg => _consoleMsg;
-  String get sampleQuality => _sampleQuality;
+  sampleQuality(int sampleNo) => _sampleQuality[sampleNo + 1];  
+  int get nSample => _nSample;
 
   // constructor
   JaneStatus(this._experimentState, this._referenceData, this._experimentData);
@@ -37,8 +39,21 @@ class JaneStatus extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateSampleQuality(String quality) {
-    _sampleQuality = quality;
+  void updateSampleQuality(int sampleNo, String quality) {
+    if (_nSample == 1) {
+      _sampleQuality[0] = quality;
+    }
+    else if (sampleNo > _sampleQuality.length) {
+      _sampleQuality.add(quality);
+    }
+    else {
+      _sampleQuality[sampleNo - 1] = quality;
+    }
+    notifyListeners();
+  }
+
+  void updateNumOfSample(int nSample) {
+    _nSample = nSample;
     notifyListeners();
   }
 }

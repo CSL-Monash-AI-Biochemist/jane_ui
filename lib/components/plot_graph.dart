@@ -2,9 +2,6 @@ import 'package:jane_ui/components/jane_status.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:async';
-import 'dart:convert';
-import 'package:jane_ui/backend.dart';
 
 class ExPlot extends StatefulWidget {
   final String dataSrc;
