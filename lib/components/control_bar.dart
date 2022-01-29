@@ -43,13 +43,13 @@ class _ControlBarState extends State<ControlBar> {
               // only update if there is real data
               // TODO: check if there is any changes with current data instead
               if (experimentData[0].length > 2) {
-                janeStatus.updateExData(experimentData);
+                janeStatus.updateExData(1, experimentData);
                 janeStatus.updateExState("Test completed");
                 String msg = 'The sample quality: ' + sampleQuality;
                 janeStatus.updateConsoleMsg(msg);
               }
 
-              if (janeStatus.exData[0].length > 2) {
+              if (janeStatus.exData(1)[0].length > 2) {
                 _timer.cancel();
               }
             });
