@@ -26,7 +26,7 @@ class _ExPlotState extends State<ExPlot> {
       plotData = array2FlSpot(janeStatus.refData);
     }
     else if (widget.dataSrc == 'src') {
-      plotData = array2FlSpot(janeStatus.exData(1));
+      plotData = array2FlSpot(janeStatus.exData2Plot);
     }
 
     return LineChart(

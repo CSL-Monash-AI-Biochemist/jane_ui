@@ -44,12 +44,10 @@ class _ControlBarState extends State<ControlBar> {
           
           janeStatus.updateExData(nSample, exData);
           janeStatus.updateSampleQuality(nSample, sampleQuality);
-          janeStatus.updateConsoleMsg(
+          janeStatus.updateSelectedSample(nSample);
+          janeStatus.updateConsoleMsg('[' + DateTime.now().toString() + '] ' +
             'Finished testing Sample ' + nSample.toString() + '. Sample quality: ' + sampleQuality);
         }
-
-        janeStatus.updateConsoleMsg('nSample: ' + nSample.toString() + ' prev: ' + nSamplePrev.toString() + ' state:' + state);
-
 
         nSamplePrev = nSample;
         // if (nSample == 3) {

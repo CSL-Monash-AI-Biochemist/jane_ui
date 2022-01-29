@@ -4,16 +4,18 @@ class JaneStatus extends ChangeNotifier {
   // class variables
   String _experimentState = '';
   var _experimentData = {1:[]};
+  List<dynamic> _experimentData2Plot = [];
   List<dynamic> _referenceData = [];
   String _consoleMsg = '';
   List<String> _sampleQuality = ['']; // sample no starts from one 
   int _nSample = -1;
   List<String> _sampleSelectList = ['No sample data yet'];
-  List<String> _selectedSample = ['No sample data yet', 'N'];
+  List<String> _selectedSample = ['No sample data yet', 'N/A'];
 
   // getter
   String get exState => _experimentState;
-  exData(int sampleNo) => _experimentData[sampleNo];
+  // exData(int sampleNo) => _experimentData[sampleNo];
+  List<dynamic> get exData2Plot => _experimentData2Plot;
   List<dynamic> get refData => _referenceData;
   String get consoleMsg => _consoleMsg;
   sampleQuality(int sampleNo) => _sampleQuality[sampleNo + 1];  
@@ -22,7 +24,7 @@ class JaneStatus extends ChangeNotifier {
   List<String> get selectedSample => _selectedSample;
 
   // constructor
-  JaneStatus(this._experimentState, this._referenceData, this._experimentData);
+  JaneStatus(this._experimentState, this._referenceData, this._experimentData2Plot);
 
   void updateSelectedSample(int sampleNo) {
     // _selectedSample: 0 => sample name, 1 => sample quality 
@@ -38,6 +40,7 @@ class JaneStatus extends ChangeNotifier {
       _selectedSample[0] = 'Sample ' + sampleNo.toString();
     }
 
+    _experimentData2Plot = _experimentData[sampleNo]!;
     _selectedSample[1] = _sampleQuality[sampleNo - 1];
   }
 

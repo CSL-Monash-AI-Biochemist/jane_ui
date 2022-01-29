@@ -41,7 +41,7 @@ class JaneParent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => JaneStatus('idle', [[0.0, 0.0], [1.2, 1.0]], {1: [[0.0, 0.0], [1.2, 1.0]]}),
+      create: (_) => JaneStatus('idle', [[0.0, 0.0], [1.2, 1.0]], [[0.0, 0.0], [1.2, 1.0]]),
       
       child: Row(
           children: <Widget>[
