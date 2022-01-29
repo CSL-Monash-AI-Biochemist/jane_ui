@@ -81,7 +81,7 @@ class JaneParent extends StatelessWidget {
 
                     Expanded(
                       flex: 1,
-                      child: plotSelector()),
+                      child: PlotSelector()),
 
                     Expanded(
                       flex: 5,

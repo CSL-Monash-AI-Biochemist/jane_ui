@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:jane_ui/components/jane_status.dart';
+import 'package:provider/provider.dart';
 
-class plotSelector extends StatefulWidget {
-  plotSelector({Key? key}) : super(key: key);
+class PlotSelector extends StatefulWidget {
+  PlotSelector({Key? key}) : super(key: key);
 
   @override
-  State<plotSelector> createState() => _plotSelectorState();
+  State<PlotSelector> createState() => _PlotSelectorState();
 }
 
-class _plotSelectorState extends State<plotSelector> {
-  String dropdownItem = 'No sample data yet';
+class _PlotSelectorState extends State<PlotSelector> {
+  String dropdownItem = 'No';
   String sampleQuality = 'N/A';
 
   @override
   Widget build(BuildContext context) {
+    final janeStatus = context.watch<JaneStatus>();
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         DropdownButton<String>(
-          value: dropdownItem,
-          items: <String>['Experiment A', 'Experiment B', 'No sample data yet']
+          value: janeStatus.selectedSample,
+          items: janeStatus.sampleSelectList
               .map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
@@ -27,7 +31,7 @@ class _plotSelectorState extends State<plotSelector> {
           }).toList(),
           onChanged: (String? newValue) {
             setState(() {
-              dropdownItem = newValue!;
+              janeStatus.updateSelectedSample(newValue!);
             });
           },
         ),
