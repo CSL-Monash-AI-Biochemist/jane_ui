@@ -33,7 +33,9 @@ class JaneParent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => JaneStatus('idle', [[0.0, 0.0], [1.2, 1.0]], [[0.0, 0.0], [1.2, 1.0]]),
+      // create: (_) => JaneStatus('idle', [[0.0, 0.0], [1.2, 1.0]], [[0.0, 0.0], [1.2, 1.0]]),
+      create: (_) => JaneStatus(),
+      
       child: Row(
           children: <Widget>[
             Expanded(
@@ -64,7 +66,7 @@ class JaneParent extends StatelessWidget {
                     const Padding(padding: EdgeInsets.all(5)),
                     Expanded(
                       flex: 5,
-                      child: ExPlot(dataSrc: 'src')),
+                      child: ExPlot(dataSrc: 'ref')),
 
                     const Padding(padding: EdgeInsets.all(10)),
                     const Text("Time [min]"),
@@ -76,7 +78,7 @@ class JaneParent extends StatelessWidget {
 
                     Expanded(
                       flex: 5,
-                      child: ExPlot(dataSrc: 'ref')),
+                      child: ExPlot(dataSrc: 'src')),
                     const Padding(padding: EdgeInsets.all(10)),
                     const Text("Time [min]")
                   ],

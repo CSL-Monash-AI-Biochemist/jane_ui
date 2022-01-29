@@ -26,10 +26,10 @@ class _ExPlotState extends State<ExPlot> {
     List<FlSpot> plotData = [];
 
     if (widget.dataSrc == 'ref') {
-      plotData = array2FlSpot(janeStatus.exData);
+      plotData = array2FlSpot(janeStatus.refData);
     }
     else if (widget.dataSrc == 'src') {
-      plotData = array2FlSpot(janeStatus.refData);
+      plotData = array2FlSpot(janeStatus.exData(0));
     }
 
     return LineChart(
