@@ -21,7 +21,7 @@ class _PlotSelectorState extends State<PlotSelector> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         DropdownButton<String>(
-          value: janeStatus.selectedSample,
+          value: janeStatus.selectedSample[0],
           items: janeStatus.sampleSelectList
               .map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
@@ -31,12 +31,13 @@ class _PlotSelectorState extends State<PlotSelector> {
           }).toList(),
           onChanged: (String? newValue) {
             setState(() {
-              janeStatus.updateSelectedSample(newValue!);
+              // janeStatus.selectedSample[0] = newValue!;
+              janeStatus.updateSelectedSample(int.parse(newValue!.substring(7)));
             });
           },
         ),
         const Padding(padding: EdgeInsets.all(5)),
-        Text(': ' + sampleQuality, 
+        Text(': ' + janeStatus.selectedSample[1], 
           style: const TextStyle(
             fontSize: 20,
             color: Colors.redAccent,

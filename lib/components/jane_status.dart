@@ -9,7 +9,7 @@ class JaneStatus extends ChangeNotifier {
   List<String> _sampleQuality = ['']; // sample no starts from one 
   int _nSample = -1;
   List<String> _sampleSelectList = ['No sample data yet'];
-  String _selectedSample = 'No sample data yet';
+  List<String> _selectedSample = ['No sample data yet', 'N'];
 
   // getter
   String get exState => _experimentState;
@@ -19,13 +19,26 @@ class JaneStatus extends ChangeNotifier {
   sampleQuality(int sampleNo) => _sampleQuality[sampleNo + 1];  
   int get nSample => _nSample;
   List<String> get sampleSelectList => _sampleSelectList;
-  String get selectedSample => _selectedSample;
+  List<String> get selectedSample => _selectedSample;
 
   // constructor
   JaneStatus(this._experimentState, this._referenceData, this._experimentData);
 
-  void updateSelectedSample(String sample) {
-    _selectedSample = sample;
+  void updateSelectedSample(int sampleNo) {
+    // _selectedSample: 0 => sample name, 1 => sample quality 
+    if (sampleNo == 1) {
+      _sampleSelectList[0] = 'Sample 1';
+      _selectedSample[0] = 'Sample 1';
+    }
+    else if (sampleNo > _sampleSelectList.length) {
+      _sampleSelectList.add('Sample ' + sampleNo.toString());
+      _selectedSample[0] = 'Sample ' + sampleNo.toString();
+    }
+    else {
+      _selectedSample[0] = 'Sample ' + sampleNo.toString();
+    }
+
+    _selectedSample[1] = _sampleQuality[sampleNo - 1];
   }
 
   void updateConsoleMsg(String msg) {
@@ -50,13 +63,9 @@ class JaneStatus extends ChangeNotifier {
   void updateSampleQuality(int sampleNo, String quality) {
     if (_nSample == 1) {
       _sampleQuality[0] = quality;
-      _sampleSelectList[0] = 'Sample 1';
-      _selectedSample = 'Sample 1';
     }
     else if (sampleNo > _sampleQuality.length) {
       _sampleQuality.add(quality);
-      _sampleSelectList.add('Sample ' + sampleNo.toString());
-      _selectedSample = 'Sample ' + sampleNo.toString();
     }
     else {
       _sampleQuality[sampleNo - 1] = quality;
