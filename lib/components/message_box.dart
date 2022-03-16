@@ -27,7 +27,10 @@ class _MsgBoxState extends State<MsgBox> {
           isAlwaysShown: true,
           child: ListView(
             children: [
-              Text(janeStatus.consoleMsg)
+              Text(janeStatus.consoleMsg,
+                style: const TextStyle(
+                  fontSize: 17
+                ),)
             ],
           ),
         ),
@@ -35,3 +38,4 @@ class _MsgBoxState extends State<MsgBox> {
     );
   }
 }
+

@@ -11,8 +11,6 @@ void main() => runApp(JaneUI());
 class JaneUI extends StatelessWidget {
   JaneUI({Key? key}) : super(key: key);
 
-  final String value = 'hihihihihihi';
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

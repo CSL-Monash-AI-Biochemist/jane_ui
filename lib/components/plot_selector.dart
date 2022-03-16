@@ -31,7 +31,8 @@ class _PlotSelectorState extends State<PlotSelector> {
           }).toList(),
           onChanged: (String? newValue) {
             setState(() {
-              janeStatus.updateSelectedSample(int.parse(newValue!.substring(7)));
+              // janeStatus.updateSelectedSample(int.parse(newValue!.substring(7)));
+              janeStatus.selectSampleToPlot(newValue!);
             });
           },
         ),

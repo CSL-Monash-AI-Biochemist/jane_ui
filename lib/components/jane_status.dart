@@ -7,6 +7,7 @@ class JaneStatus extends ChangeNotifier {
   List<dynamic> _experimentData2Plot = [];
   List<dynamic> _referenceData = [];
   String _consoleMsg = '';
+  List<String> _prevConsoleMsg = [''];
   List<String> _sampleQuality = ['']; // sample no starts from one 
   int _nSample = -1;
   List<String> _sampleSelectList = ['No sample data yet'];
@@ -26,26 +27,80 @@ class JaneStatus extends ChangeNotifier {
   // constructor
   JaneStatus(this._experimentState, this._referenceData, this._experimentData2Plot);
 
+  void selectSampleToPlot(String sample) {
+    _selectedSample[0] = sample;
+
+    int sampleNo = 0;
+
+    if (sample == "Sample") {
+      sampleNo = 0;
+    }
+    else if (sample == "Retested sample") {
+      sampleNo = 1;
+    }
+    else if (sample == "Retested standard") {
+      sampleNo = 2;
+    }
+
+    _experimentData2Plot = _experimentData[sampleNo]!;
+    _selectedSample[1] = _sampleQuality[sampleNo];
+    notifyListeners();
+  }
+
   void updateSelectedSample(int sampleNo) {
     // _selectedSample: 0 => sample name, 1 => sample quality 
+    String sampleName = '';
+
     if (sampleNo == 1) {
-      _sampleSelectList[0] = 'Sample 1';
-      _selectedSample[0] = 'Sample 1';
+      _sampleSelectList[0] = 'Sample';
+      _selectedSample[0] = 'Sample';
     }
     else if (sampleNo > _sampleSelectList.length) {
-      _sampleSelectList.add('Sample ' + sampleNo.toString());
-      _selectedSample[0] = 'Sample ' + sampleNo.toString();
+      if (sampleNo == 2) {
+        sampleName = 'Retested sample';
+      }
+      else if (sampleNo == 3) {
+        sampleName = 'Retested standard';
+      }
+      _sampleSelectList.add(sampleName);
+      _selectedSample[0] = sampleName;
+
     }
     else {
-      _selectedSample[0] = 'Sample ' + sampleNo.toString();
+      if (sampleNo == 1) {
+        sampleName = 'Sample';
+      }
+      else if (sampleNo == 2) {
+        sampleName = 'Retested sample';
+      }
+      else if (sampleNo == 3) {
+        sampleName = 'Retested standard';
+      }  
+      _selectedSample[0] = sampleName;
+
     }
 
     _experimentData2Plot = _experimentData[sampleNo]!;
     _selectedSample[1] = _sampleQuality[sampleNo - 1];
+
+    notifyListeners();
   }
 
   void updateConsoleMsg(String msg) {
-    _consoleMsg += '\n' + msg;
+
+    bool alreadyHasMsg = false;
+    for (var prevMsg in _prevConsoleMsg) {
+      if (msg == prevMsg) {
+        alreadyHasMsg = true;
+      }      
+    }
+
+    if (!alreadyHasMsg) {
+      _consoleMsg += '\n' + msg;
+    }
+
+    _prevConsoleMsg.add(msg);
+    notifyListeners();
   }
 
   void updateExState(String state) {

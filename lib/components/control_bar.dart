@@ -19,46 +19,108 @@ class _ControlBarState extends State<ControlBar> {
   Widget build(BuildContext context) {
     final janeStatus = context.watch<JaneStatus>();
     int nSamplePrev = -1;
+    bool printed = false;
 
     // update GUI - interface with backend server 
     void _updateGUI() async {
+      bool showTimeHeader = false;
+      String msgTimeHeader = showTimeHeader ? '[' + DateTime.now().toString() + '] ' : '';
+
       if (janeStatus.exState == 'idle') {
-        janeStatus.updateExState('starting');
-        await updateExperimentState('starting');
-        janeStatus.updateConsoleMsg('Started experiment');
+        janeStatus.updateExState('jane_moving');
+        await updateExperimentState('jane_moving');
+        janeStatus.updateConsoleMsg(msgTimeHeader +'Started experiment');
+        janeStatus.updateConsoleMsg(msgTimeHeader +'Jane is transferring sample to the Spinnaker');
       }
 
-      Timer.periodic(const Duration(seconds: 1), (_timer) async {
+      Timer.periodic(const Duration(milliseconds: 500), (_timer) async {
         int nSample = await getNoOfSample();
         janeStatus.updateNumOfSample(nSample);
         var state = await getExperimentState();
         janeStatus.updateExState(state);
 
-        if (nSample == 0) {
-          var refData = await getReferenceData();
-          janeStatus.updateRefData(refData);
-        }
-        else if (nSample > 0 && nSample != nSamplePrev) {
-          var exData = await getExperimentData();
-          String sampleQuality = await getSampleQuality();      
+        if (nSample != nSamplePrev) {
+          if (nSample == 0) {
+            var refData = await getReferenceData();
+            janeStatus.updateRefData(refData);
+            janeStatus.updateConsoleMsg(msgTimeHeader +'Received data for test standard');
+            printed = false;
+          }
+          else if (nSample == 1) {
+            var exData = await getExperimentData();
+            String sampleQuality = await getSampleQuality();      
+            
+            janeStatus.updateExData(nSample, exData);
+            janeStatus.updateSampleQuality(nSample, sampleQuality);
+            janeStatus.updateSelectedSample(nSample);
+            janeStatus.updateConsoleMsg(msgTimeHeader +
+              'Finished testing sample ===> quality: ' + sampleQuality);
+            printed = false;
+          }
+          else if (nSample == 2) {  // retest sample
+            var exData = await getExperimentData();
+            String sampleQuality = await getSampleQuality();      
+            
+            janeStatus.updateExData(nSample, exData);
+            janeStatus.updateSampleQuality(nSample, sampleQuality);
+            janeStatus.updateSelectedSample(nSample);
+            janeStatus.updateConsoleMsg(msgTimeHeader +
+              'Finished retesting sample ===> quality: ' + sampleQuality);
+            
+            printed = false;
+          }
+          else if (nSample == 3) {  // retest standard
+            var exData = await getExperimentData();
+            String sampleQuality = await getSampleQuality();      
+            
+            janeStatus.updateExData(nSample, exData);
+            janeStatus.updateSampleQuality(nSample, sampleQuality);
+            janeStatus.updateSelectedSample(nSample);
+
+            if (sampleQuality == 'Good IgG') {
+              janeStatus.updateConsoleMsg(msgTimeHeader +
+                'Finished retesting standard\nTest standard quality is normal\nAbnormality confirmed');
+                janeStatus.updateConsoleMsg(msgTimeHeader + 'Jane has completed test sequence!');
+                janeStatus.updateConsoleMsg(msgTimeHeader + 'Transferring plate back to storage');
+            }
+            else {
+              janeStatus.updateConsoleMsg(msgTimeHeader +
+                'Finished retesting standard. Test standard quality is abnormal, please check the quality of the column!');              
+            }
+            printed = false;
+          }
+
           
-          janeStatus.updateExData(nSample, exData);
-          janeStatus.updateSampleQuality(nSample, sampleQuality);
-          janeStatus.updateSelectedSample(nSample);
-          janeStatus.updateConsoleMsg('[' + DateTime.now().toString() + '] ' +
-            'Finished testing Sample ' + nSample.toString() + '. Sample quality: ' + sampleQuality);
         }
 
         nSamplePrev = nSample;
-        // if (nSample == 3) {
-        //   _timer.cancel();
+
+        if (state == 'jane_idle' && !printed) {
+          janeStatus.updateConsoleMsg(msgTimeHeader + 'Spinnaker is transferring sample to the Vanquish HPLC');
+          printed = true;
+        }
+        else if (state == 'standard' && !printed) {
+          janeStatus.updateConsoleMsg(msgTimeHeader + 'Running test standard...');
+          printed = true;
+        }
+        // else if (state == 'sample_retest' && !printed) {
+        //   janeStatus.updateConsoleMsg(msgTimeHeader + 'Retesting sample...');
+        //   printed = true;
         // }
+        // else if (state == 'standard_retest' && !printed) {
+        //   janeStatus.updateConsoleMsg(msgTimeHeader + 'Retesting standard...');
+        //   printed = true;
+        // }
+        else if (state == 'complete' && !printed) {
+          await updateExperimentState('idle');
+
+          printed = true;
+          //_timer.cancel();
+        }
         
       });
 
     }
-    
-
 
 
     // return widgets
@@ -71,7 +133,7 @@ class _ControlBarState extends State<ControlBar> {
           },
           label: const Text(
             'Start',
-            style: TextStyle(fontSize: 22),
+            style: TextStyle(fontSize: 30),
           ),
         ),
 
@@ -95,10 +157,11 @@ class _ControlBarState extends State<ControlBar> {
         Text(
           'Status: ' + _getStatusDisplay(janeStatus.exState),
           style: TextStyle(
-              fontSize: 24,
+              fontSize: 26,
               fontWeight: FontWeight.bold,
               color: Colors.green[400]),
-        )
+        ),
+
       ],
     );
   }
@@ -112,11 +175,23 @@ class _ControlBarState extends State<ControlBar> {
     else if (state == 'starting') {
       output = 'starting';
     }
+    else if (state == 'jane_moving') {
+      output = 'plate transfer - Jane';
+    }
+    else if (state == 'jane_idle') {
+      output = 'plate transfer - Spinnaker';
+    }
     else if (state == 'standard') {
       output = 'running standard';
     }
     else if (state == 'sample') {
-      output = 'running samples';
+      output = 'testing sample';
+    }
+    else if (state == 'sample_retest') {
+      output = 'retesting sample';
+    }
+    else if (state == 'standard_retest') {
+      output = 'retesting standard';
     }
     else if (state == 'complete') {
       output = 'complete';
